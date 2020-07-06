@@ -1,0 +1,39 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="ict.plan.mapper.PermissionMapper">
+
+    <resultMap id="permissionResultMap" type="ict.plan.entity.shiro.Permission">
+        <result property="id" column="permission_id" />
+        <result property="permissionName" column="p_name" />
+        <result property="pid" column="pid" />
+        <result property="url" column="url" />
+        <result property="icon" column="icon" />
+        <result property="status" column="p_status" />
+        <result property="sort" column="sort" />
+        <result property="type" column="type" />
+        <result property="perms" column="perms" />
+        <result property="remark" column="p_remark"/>
+    </resultMap>
+
+    <sql id="all_column">
+        id permission_id,permission_name p_name,pid,url,perms,type,icon,sort,status p_status,remark p_remark
+    </sql>
+    <insert id="save" parameterType="ict.plan.entity.shiro.Permission" useGeneratedKeys="true" keyProperty="id">
+        insert into t_permission(pid,permission_name,url,perms,type,icon,sort,status,remark) values (#{id},#{permissionName},#{url},#{perms},#{type},#{icon},#{sort},#{status},#{remark})
+    </insert>
+    <delete id="permissionDelById" parameterType="Integer">
+        delete from t_permission where id = #{id}
+    </delete>
+    <select id="permissions" resultMap="permissionResultMap">
+        select <include refid="all_column" />
+        from t_permission
+    </select>
+    <select id="findPermissionById" parameterType="Integer" resultMap="permissionResultMap">
+        select <include refid="all_column"></include> from t_permission where id = #{id}
+    </select>
+    <select id="getUserModule" resultMap="permissionResultMap">
+        select <include refid="all_column"></include> from t_permission  where kind=1
+    </select>
+</mapper>

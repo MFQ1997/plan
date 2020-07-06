@@ -1,0 +1,72 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="ict.plan.mapper.ProjectMapper">
+    <resultMap id="resultMap" type="ict.plan.entity.po.Project">
+        <result property="id" column="id"></result>
+        <result property="name" column="name"></result>
+        <result property="ownerPhone" column="owner_phone"></result>
+        <result property="ownerName" column="owner_name"></result>
+        <result property="payCosts" column="pay_costs"></result>
+        <result property="spendCosts" column="spend_costs"></result>
+        <result property="placeId" column="place_id"></result>
+        <result property="companyId" column="company_id"></result>
+        <result property="handler" column="handler"></result>
+        <result property="remark" column="remark"></result>
+    </resultMap>
+
+    <insert id="save" parameterType="ict.plan.entity.po.Project" keyProperty="id" useGeneratedKeys="true">
+        insert into t_project (name,owner_name,owner_phone,pay_costs,spend_costs,place_id,company_id,handler,remark) values (#{name},#{ownerName},#{ownerPhone},#{payCosts},#{spendCosts},#{placeId},#{companyId},#{handler},#{remark});
+    </insert>
+
+    <select id="findProjectById" parameterType="Integer" resultType="ict.plan.entity.po.Project">
+        select * from t_project where id = #{id}
+    </select>
+
+    <select id="findProjectByName" parameterType="string" resultMap="resultMap">
+        select * from t_project where name LIKE CONCAT('%',#{name},'%')
+    </select>
+
+    <select id="getProjectLikeName" resultMap="resultMap">
+        select * from t_project where company_id =#{companyId} and name LIKE CONCAT('%',#{name},'%')
+    </select>
+
+    <select id="projects" parameterType="Integer" resultMap="resultMap">
+        select * from t_project where company_id =#{companyId}
+    </select>
+
+    <update id="Update" parameterType="ict.plan.entity.po.Project">
+        update t_project
+        <set>
+            <if test="name != null">
+                name =#{name},
+            </if>
+            <if test="ownerPhone != null">
+                owner_phone=#{ownerPhone},
+            </if>
+            <if test="ownerName != null">
+                owner_name=#{ownerName},
+            </if>
+            <if test="payCosts != null">
+                pay_costs=#{payCosts},
+            </if>
+            <if test="spendCosts != null">
+                spend_costs=#{spendCosts},
+            </if>
+            <if test="placeId != null">
+                place_id=#{placeId},
+            </if>
+            <if test="companyId != null">
+                company_id=#{companyId},
+            </if>
+            <if test="handler != null">
+                handler=#{handler},
+            </if>
+            <if test="remark != null">
+                remark=#{remark}
+            </if>
+            <where>id =#{id}</where>
+        </set>
+    </update>
+</mapper>

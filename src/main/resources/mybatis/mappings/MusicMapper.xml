@@ -1,0 +1,20 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="ict.plan.mapper.MusicMapper">
+    <resultMap id="musicResultMap" type="ict.plan.entity.po.Music">
+        <result property="id" column="id"></result>
+
+    </resultMap>
+
+    <insert id="save" parameterType="ict.plan.entity.po.Music" keyProperty="id" useGeneratedKeys="true">
+        insert into t_music(company_id,upload_time,update_time,url,remark) values (#{companyId},#{uploadTime},#{updateTime},#{url},#{remark})
+    </insert>
+
+    <!--查询出公司已经上传了多少文件-->
+    <select id="countNum" resultType="int">
+        select count(*) from t_music where company_id =#{companyId}
+    </select>
+
+</mapper>

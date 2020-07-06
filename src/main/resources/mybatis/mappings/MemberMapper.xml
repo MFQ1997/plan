@@ -1,0 +1,51 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="ict.plan.mapper.MemberMapper">
+    <resultMap id="memberResult" type="ict.plan.entity.po.Member">
+        <result property="id" column="id"></result>
+        <result property="memberName" column="name"></result>
+        <result property="module" column="module"></result>
+        <result property="price" column="price"></result>
+        <result property="quota" column="quota"></result>
+
+    </resultMap>
+
+    <sql id="member_all_column">
+        id,name,module,price,quota
+    </sql>
+
+    <insert id="save" parameterType="ict.plan.entity.po.Member">
+        insert into t_member(name,module,price,quota) values(#{memberName},#{module},#{price},#{quota})
+    </insert>
+
+
+    <select id="getAllMember" resultMap="memberResult">
+        select * from t_member;
+    </select>
+
+    <select id="findMemberById" parameterType="Integer" resultMap="memberResult">
+        select <include refid="member_all_column"></include> from t_member
+        <where>id = #{id}</where>
+    </select>
+
+    <delete id="deleteById" parameterType="Integer">
+        delete from t_member where identity =#{id}
+    </delete>
+
+    <update id="update" parameterType="ict.plan.entity.po.Member">
+        update t_member
+        <set>
+            <if test=""></if>
+            <if test=""></if>
+            <if test=""></if>
+            <if test=""></if>
+            <if test=""></if>
+            <if test=""></if>
+        </set>
+        <where>
+            id =#{id}
+        </where>
+    </update>
+</mapper>

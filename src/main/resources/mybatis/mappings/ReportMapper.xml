@@ -1,0 +1,25 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="ict.plan.mapper.ReportMapper">
+    <resultMap id="CustomerFlowReport" type="ict.plan.entity.po.CustomerFlowReport">
+        <result property="location" column="location"></result>
+        <result property="companyName" column="name"></result>
+        <result property="count" column="count"></result>
+    </resultMap>
+
+    <!--从公司表里面拿出客户流量统计信息-->
+    <select id="getCustomerFlowReport" resultMap="CustomerFlowReport">
+        select location,group_concat(name separator ',') name,count(*) count from t_company group by location order by count desc
+    </select>
+
+    <select id="getCustomerConsumptionReport" resultMap="CustomerFlowReport">
+        select location,group_concat(name separator ',') name ,count(*) count from t_company group by location
+    </select>
+    <select id="getFinancialStatisticalReport" resultMap="CustomerFlowReport">
+        select location,group_concat(name separator ',') name ,count(*) count from t_company group by location
+    </select>
+
+
+</mapper>

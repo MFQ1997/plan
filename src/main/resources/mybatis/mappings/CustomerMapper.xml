@@ -1,0 +1,49 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="ict.plan.mapper.CustomerMapper">
+    <resultMap id="customerResultMap" type="ict.plan.entity.po.Customer">
+        <result property="id" column="id"></result>
+        <result property="name" column="name"></result>
+        <result property="firstContactName" column="first_contact_name"></result>
+        <result property="firstContactPhone" column="first_contact_phone"></result>
+        <result property="companyId" column="company_id"></result>
+    </resultMap>
+
+    <insert id="save" parameterType="ict.plan.entity.po.Customer" useGeneratedKeys="true" keyProperty="id">
+        insert into t_customer(name,first_contact_name,first_contact_phone,company_id) values(#{name},#{firstContactName},#{firstContactPhone},#{companyId})
+    </insert>
+
+    <delete id="deleteById" parameterType="Integer">
+        delete from t_customer where id =#{id}
+    </delete>
+
+    <update id="update" parameterType="ict.plan.entity.po.Customer">
+        update t_customer
+        <set>
+            <if test="name !=null">
+                name =#{name},
+            </if>
+            <if test="firstContactName != null">
+                first_contact_name =#{firstContactName},
+            </if>
+            <if test="firstContactPhone != null">
+                first_contact_phone=#{firstContactPhone},
+            </if>
+            <if test="companyId != null">
+                company_id=#{companyId}
+            </if>
+        </set>
+        <where>id =#{id}</where>
+    </update>
+
+    <select id="selectCustomerByCompanyId" parameterType="Integer" resultMap="customerResultMap">
+        select * from t_customer where company_id =#{companyId}
+    </select>
+
+    <select id="findCustomerLikeKey"  resultMap="customerResultMap">
+        select * from t_customer where company_id=#{companyId} AND name like concat('%',#{name},'%')
+    </select>
+
+</mapper>

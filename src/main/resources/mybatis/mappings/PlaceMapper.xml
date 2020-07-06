@@ -1,0 +1,73 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="ict.plan.mapper.PlaceMapper">
+
+    <!--自定义返回的Map-->
+    <resultMap id="resultWithProject" type="ict.plan.entity.po.Place">
+        <result property="id" column="id"></result>
+        <result property="location" column="location"></result>
+        <result property="placeName" column="place_name"></result>
+        <result property="firstContactName" column="first_contact_name"></result>
+        <result property="firstContactPhone" column="first_contact_phone"></result>
+        <result property="companyId" column="company_id"></result>
+        <result property="status" column="status"></result>
+        <result property="remark" column="remark"></result>
+    </resultMap>
+
+    <sql id="place_all_column">
+        id,location,place_name,first_contact_name,first_contact_phone,status,remark
+    </sql>
+
+    <!--新增场地-->
+    <insert id="save" parameterType="ict.plan.entity.po.Place" useGeneratedKeys="true" keyProperty="id">
+        insert into t_place(location,place_name,first_contact_name,first_contact_phone,company_id,status,remark) values (#{location},#{placeName},#{firstContactName},#{firstContactPhone},#{companyId},#{status},#{remark})
+    </insert>
+    
+    <delete id="deleteById" parameterType="Integer">
+        delete from t_place where id =#{id}
+    </delete>
+    
+    <update id="update" parameterType="ict.plan.entity.po.Place">
+        update t_place
+        <set>
+            <if test="location!=null">
+                location=#{location},
+            </if>
+            <if test="placeName!=null">
+                place_name=#{placeName},
+            </if>
+            <if test="firstContactName!=null">
+                first_contact_name=#{firstContactName},
+            </if>
+            <if test="firstContactPhone!=null">
+                first_contact_phone=#{firstContactPhone},
+            </if>
+            <if test="status !=null">
+                status=#{status}
+            </if>
+            <if test="remark!=null">
+                remark =#{remark}
+            </if>
+        </set>
+        where id =#{id}
+    </update>
+
+    <!--获取所有的场地-->
+    <select id="places" resultMap="resultWithProject">
+        select <include refid="place_all_column"></include> from t_place
+    </select>
+    <!--根据id查询场地-->
+    <select id="findPlaceById" resultMap="resultWithProject">
+        select <include refid="place_all_column"></include> from t_place where identity =#{id}
+    </select>
+    <!--根据关键字进行模糊查询-->
+    <select id="findPlaceByKey" resultMap="resultWithProject">
+        select <include refid="place_all_column"></include> from t_place where place_name like concat('%',#{key},'%') or first_contact_name like concat('%',#{key},'%') or first_contact_phone like concat('%',#{key},'%')
+    </select>
+    <!--查询出公司已经上传了多少文件-->
+    <select id="countNum" resultType="int">
+        select count(*) from t_place where company_id =#{companyId}
+    </select>
+</mapper>

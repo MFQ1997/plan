@@ -1,0 +1,33 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="ict.plan.mapper.DbConnStrMapper">
+    <!--将数据库的字段和po类的属性进行映射-->
+    <resultMap id="resultMap" type="ict.plan.entity.po.DbConnString">
+        <result property="dbID" column="db_id" />
+        <result property="dbUser" column="db_user" />
+        <result property="dbPwd" column="db_pwd" />
+        <result property="dbDriverName" column="db_driver_name" />
+        <result property="dbUrl" column="db_url" />
+        <result property="flag" column="flag" />
+    </resultMap>
+    <sql id="all_column">
+        db_id,db_user,db_pwd,db_driver_name,db_url,flag
+    </sql>
+    <!-- 查询所有有效 -->
+    <select id="getDbConnStrings"  resultType="HashMap" resultMap="resultMap">
+        SELECT <include refid="all_column"/>
+        FROM db_conn_string
+        WHERE flag = 1;
+    </select>
+    <!-- 查询id有效 -->
+    <select id="getDbConnStringByDbID" parameterType="String" resultType="ict.plan.entity.po.DbConnString" resultMap="resultMap">
+        SELECT <include refid="all_column"/>
+        FROM db_conn_string
+        <where>
+            flag = 1
+            <if test="dbID != null"> AND db_id = #{dbID} </if>
+        </where>
+    </select>
+</mapper>
